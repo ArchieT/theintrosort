@@ -54,93 +54,53 @@ partition(itertyp first,
           itertyp middle_left, itertyp middle_right,
           itertyp last) {
     while (true) {
+        for (auto start = middle_left; start != middle_right; start++)
+            assert(*(start + 1) == *start);
         if (first == middle_left) {
             if (middle_right == last)
                 return {first, last};
+            else if (last == middle_right + 1 && *last > *middle_right)
+                return {middle_left, middle_right};
             else {
                 if (*last > *middle_right)
-                    //return partition(first, first, middle_right, last - 1);
-                {
                     last--;
-                    continue;
-                }
                 else if (*last == *middle_right) {
-                    //auto new_middle_right = middle_right + 1;
-                    //swap(last, new_middle_right);
-                    //return partition(first, first, new_middle_right, last);
                     middle_right++;
                     swap(last, middle_right);
-                    continue;
                 } else {
-                    //auto new_middle_right = middle_right + 1;
-                    //swap(first, new_middle_right);
-                    //swap(first, last);
-                    //return partition(first, first + 1, new_middle_right, last);
                     middle_right++;
                     swap(first, middle_right);
                     swap(first, last);
                     middle_left++;
-                    continue;
                 }
             }
         } else if (middle_right == last) {
             if (*first < *middle_left)
-                //return partition(first + 1, middle_left, last, last);
-            {
                 first++;
-                continue;
-            }
             else if (*first == *middle_left) {
-//                auto new_middle_left = middle_left - 1;
-//                swap(first, new_middle_left);
-//                return partition(first, new_middle_left, last, last);
                 middle_left--;
                 swap(first, middle_left);
-                continue;
             } else {
-//                auto new_middle_left = middle_left - 1;
-//                swap(last, new_middle_left);
-//                swap(last, first);
-//                return partition(first, new_middle_left, last - 1, last);
                 middle_left--;
                 swap(last, middle_left);
                 swap(last, first);
                 middle_right--;
-                continue;
             }
         } else if (*first < *middle_left)
-//            return partition(first + 1, middle_left, middle_right, last);
-        {
             first++;
-            continue;
-        }
         else if (*last > *middle_left)
-//            return partition(first, middle_left, middle_right, last - 1);
-        {
             last--;
-            continue;
-        }
         else if (*first == *middle_left) {
-//            auto new_middle_left = middle_left - 1;
-//            swap(first, new_middle_left);
-//            return partition(first, new_middle_left, middle_right, last);
             middle_left--;
             swap(first, middle_left);
-            continue;
         } else if (*last == *middle_right) {
-//            auto new_middle_right = middle_right + 1;
-//            swap(last, new_middle_right);
-//            return partition(first, middle_left, new_middle_right, last);
             middle_right++;
             swap(last, middle_right);
-            continue;
         } else {
             swap(first, last);
-//            return partition(first + 1, middle_left, middle_right, last - 1);
-            first++; last--;
-            continue;
+            first++;
+            last--;
         }
-//        return {middle_left, middle_right};
     }
 }
 
