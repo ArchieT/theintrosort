@@ -49,57 +49,18 @@ itertyp piv(itertyp first, itertyp end) {
     return middle;
 }
 
-std::pair<itertyp, itertyp>
-partition(itertyp first,
-          itertyp middle_left, itertyp middle_right,
-          itertyp last) {
-    while (true) {
-        for (auto start = middle_left; start != middle_right; start++)
-            assert(*(start + 1) == *start);
-        if (first == middle_left) {
-            if (middle_right == last)
-                return {first, last};
-            else if (last == middle_right + 1 && *last > *middle_right)
-                return {middle_left, middle_right};
-            else {
-                if (*last > *middle_right)
-                    last--;
-                else if (*last == *middle_right) {
-                    middle_right++;
-                    swap(last, middle_right);
-                } else {
-                    middle_right++;
-                    swap(first, middle_right);
-                    swap(first, last);
-                    middle_left++;
-                }
-            }
-        } else if (middle_right == last) {
-            if (*first < *middle_left)
-                first++;
-            else if (*first == *middle_left) {
-                middle_left--;
-                swap(first, middle_left);
-            } else {
-                middle_left--;
-                swap(last, middle_left);
-                swap(last, first);
-                middle_right--;
-            }
-        } else if (*first < *middle_left)
+void partition(itertyp first,
+               itertyp middle,
+               itertyp last) {
+    while (first != last) {
+        if (*first <= *middle)
             first++;
-        else if (*last > *middle_left)
+        else if (*last >= *middle)
             last--;
-        else if (*first == *middle_left) {
-            middle_left--;
-            swap(first, middle_left);
-        } else if (*last == *middle_right) {
-            middle_right++;
-            swap(last, middle_right);
-        } else {
+        else {
             swap(first, last);
             first++;
-            last--;
+            if (first!=last) last--;
         }
     }
 }
@@ -148,10 +109,10 @@ void quicksort(itertyp first, itertyp end) {
     auto last = end - 1;
     if (first != last) {
         auto middle = piv(first, end);
-        auto middles = partition(first + 1, middle, middle, last - 1);
-        quicksort(first, middles.first);
-        assert(middles.second != end);
-        if (middles.second != last) quicksort(middles.second + 1, end);
+        auto lastminus = last-1;
+        if(first!=lastminus) partition(first + 1, middle, lastminus);
+        if (middle != first) quicksort(first, middle);
+        if (middle != last) quicksort(middle + 1, end);
     }
 }
 
@@ -163,9 +124,11 @@ void introsort(itertyp first, itertyp end, int remaining) {
             selection_sort(first, end);
         } else if (remaining >= 0) {
             auto middle = piv(first, end);
-            auto middles = partition(first + 1, middle, middle, last - 1);
-            introsort(first, middles.first, remaining - 1);
-            introsort(middles.second + 1, end, remaining - 1);
+            partition(first + 1, middle, last - 1);
+            if (middle != first)
+                introsort(first, middle, remaining - 1);
+            if (middle != last)
+                introsort(middle + 1, end, remaining - 1);
         } else {
             for (long i = dist / 2 - 1; i >= 0; i--)
                 heapify(first, end, first + i);
