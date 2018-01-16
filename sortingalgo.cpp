@@ -53,14 +53,14 @@ void partition(itertyp first,
                itertyp middle,
                itertyp last) {
     while (first != last) {
-        if (*first <= *middle)
+        if (first != middle && *first <= *middle)
             first++;
-        else if (*last >= *middle)
+        else if (last != middle && *last >= *middle)
             last--;
         else {
             swap(first, last);
             first++;
-            if (first!=last) last--;
+            if (first != last) last--;
         }
     }
 }
@@ -109,8 +109,8 @@ void quicksort(itertyp first, itertyp end) {
     auto last = end - 1;
     if (first != last) {
         auto middle = piv(first, end);
-        auto lastminus = last-1;
-        if(first!=lastminus) partition(first + 1, middle, lastminus);
+        auto lastminus = last - 1;
+        if (first != lastminus) partition(first + 1, middle, lastminus);
         if (middle != first) quicksort(first, middle);
         if (middle != last) quicksort(middle + 1, end);
     }
