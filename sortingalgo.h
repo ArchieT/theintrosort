@@ -17,6 +17,7 @@ typedef const std::function<void(vectyp)>& withfuntyp;
 
 void sortwith(withfuntyp with,
               std::istream &i, std::ostream &o);
+void selection_sort(itertyp first, itertyp end);
 void quicksort(itertyp first, itertyp end);
 void introsort(vectyp &v);
 

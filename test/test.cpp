@@ -3,36 +3,40 @@
 //
 
 #define CATCH_CONFIG_MAIN
+
 #include "catch.hpp"
 #include "../sortingalgo.h"
 
 TEST_CASE("testujemyvecoweqs", "[vec qs]") {
-    std::vector<tentyp> our = {5,4,111,6,8,8,56,4,4,5};
-    quicksort(our.begin(),our.end());
-    bool nope = true;
-    int *prev = nullptr;
+    std::vector<tentyp> our = {5, 4, 111, 6, 8, 8, 56, 4, 4, 5};
+    quicksort(our.begin(), our.end());
+    int prev = -1;
     for (int &now : our) {
-        if (nope) {
-            nope = false;
-            prev = &now;
-        }
-        REQUIRE(*prev <= now);
-        std::cout << now << std::endl;
+        std::cout << prev << "<=" << now << std::endl;
+        REQUIRE(prev <= now);
+        prev = now;
+    }
+}
+
+TEST_CASE("testujemyvecselsort", "[vec sel]") {
+    std::vector<tentyp> our = {5, 4, 111, 6, 8, 8, 56, 4, 4, 5};
+    selection_sort(our.begin(), our.end());
+    int prev = -1;
+    for (int &now : our) {
+        std::cout << prev << "<=" << now << std::endl;
+        REQUIRE(prev <= now);
+        prev = now;
     }
 }
 
 TEST_CASE("testujemyvecowe", "[vec]") {
-    std::vector<tentyp> our = {5,4,111,6,8,8,56,4,4,5};
+    std::vector<tentyp> our = {5, 4, 111, 6, 8, 8, 56, 4, 4, 5};
     introsort(our);
-    bool nope = true;
-    int *prev = nullptr;
+    int prev = -1;
     for (int &now : our) {
-        if (nope) {
-            nope = false;
-            prev = &now;
-        }
-        REQUIRE(*prev <= now);
-        std::cout << now << std::endl;
+        std::cout << prev << "<=" << now << std::endl;
+        REQUIRE(prev <= now);
+        prev = now;
     }
 }
 

@@ -33,8 +33,7 @@ void sortwith(withfuntyp with, std::istream &i, std::ostream &o) {
 }
 
 void swap(itertyp one, itertyp other) {
-    tentyp t;
-    t = *one;
+    tentyp t = *one;
     *one = *other;
     *other = t;
 }
@@ -49,27 +48,37 @@ itertyp piv(itertyp first, itertyp end) {
     return middle;
 }
 
-void partition(itertyp first,
-               itertyp middle,
-               itertyp last) {
-    while (first != last) {
-        if (first != middle && *first <= *middle)
-            first++;
-        else if (last != middle && *last >= *middle)
-            last--;
-        else {
-            swap(first, last);
-            first++;
-            if (first != last) last--;
-        }
+itertyp partition(itertyp first,
+                  itertyp end) {
+    auto pivot = piv(first, end);
+    auto last = end - 1;
+    auto cur = first;
+    while (cur < pivot) {
+        if (*cur > *pivot) {
+            auto before_pivot = pivot - 1;
+            if (cur != before_pivot) swap(pivot, before_pivot);
+            swap(cur, pivot);
+            --pivot;
+        } else
+            ++cur;
     }
+    while (cur < last && pivot <= cur) {
+        if (*cur < *pivot) {
+            auto after_pivot = pivot + 1;
+            if (cur != after_pivot) swap(pivot, pivot + 1);
+            swap(cur, pivot);
+            ++pivot;
+        } else
+            ++cur;
+    }
+    return pivot;
 }
 
 std::pair<itertyp, itertyp>
 min_max(itertyp first, itertyp end) {
     auto min = first;
     auto max = first;
-    for (auto oddo = first; oddo != end; oddo++) {
+    for (auto oddo = first + 1; oddo < end; oddo++) {
         if (*oddo > *max) max = oddo;
         if (*oddo < *min) min = oddo;
     }
@@ -77,12 +86,16 @@ min_max(itertyp first, itertyp end) {
 }
 
 void selection_sort(itertyp first, itertyp end) {
-    auto min_and_max = min_max(first, end);
-    if (first != min_and_max.first) swap(first, min_and_max.first);
-    auto last = end - 1;
-    if (last != min_and_max.second) swap(last, min_and_max.second);
-    auto second = first + 1;
-    if (second != last) selection_sort(second, last);
+    while (first < end) {
+        auto min_and_max = min_max(first, end);
+        if (first != min_and_max.first)
+            swap(first, min_and_max.first);
+        auto last = end - 1;
+        if (last != min_and_max.second && last != min_and_max.first)
+            swap(last, min_and_max.second);
+        first++;
+        end = last;
+    }
 }
 
 void heapify(itertyp first, itertyp end, itertyp prev) {
@@ -107,35 +120,32 @@ void heapify(itertyp first, itertyp end, itertyp prev) {
 
 void quicksort(itertyp first, itertyp end) {
     auto last = end - 1;
-    if (first != last) {
-        auto middle = piv(first, end);
-        auto lastminus = last - 1;
-        if (first != lastminus) partition(first + 1, middle, lastminus);
-        if (middle != first) quicksort(first, middle);
-        if (middle != last) quicksort(middle + 1, end);
+    if (first < last) {
+        auto pivot = partition(first, end);
+        quicksort(first, pivot);
+        quicksort(pivot + 1, end);
     }
 }
 
 void introsort(itertyp first, itertyp end, int remaining) {
     auto last = end - 1;
-    if (first != last) {
+    if (first < last) {
         auto dist = std::distance(first, end);
         if (dist < 4) {
             selection_sort(first, end);
-        } else if (remaining >= 0) {
-            auto middle = piv(first, end);
-            partition(first + 1, middle, last - 1);
-            if (middle != first)
-                introsort(first, middle, remaining - 1);
-            if (middle != last)
-                introsort(middle + 1, end, remaining - 1);
-        } else {
-            for (long i = dist / 2 - 1; i >= 0; i--)
-                heapify(first, end, first + i);
-            for (auto cur = last; cur != first; cur--) {
-                swap(first, cur);
-                heapify(first, cur, first);
-            }
+        } else /*if (remaining >= 0)*/ {
+            auto pivot = partition(first, end);
+            if (pivot != first)
+                introsort(first, pivot, remaining - 1);
+            if (pivot != last)
+                introsort(pivot + 1, end, remaining - 1);
+//        } else {
+//            for (long i = dist / 2 - 1; i >= 0; i--)
+//                heapify(first, end, first + i);
+//            for (auto cur = last; cur != first; cur--) {
+//                swap(first, cur);
+//                heapify(first, cur, first);
+//            }
         }
     }
 }
