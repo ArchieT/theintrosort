@@ -115,25 +115,51 @@ min_max(itertyp first, itertyp end) {
 
 void selection_sort(itertyp first, itertyp end) {
     auto min_and_max = min_max(first, end);
-    swap(first, min_and_max.first);
+    if (first != min_and_max.first) swap(first, min_and_max.first);
     auto last = end - 1;
-    swap(last, min_and_max.second);
+    if (last != min_and_max.second) swap(last, min_and_max.second);
     auto second = first + 1;
     if (second != last) selection_sort(second, last);
+}
+
+void heapify(itertyp first, itertyp end, itertyp prev) {
+    long i = std::distance(first, prev);
+    auto largest_iter = first + i;
+    long l = 2 * i + 1;
+    auto left = first + l;
+    long r = 2 * i + 2;
+    auto right = first + r;
+    long n = std::distance(first, end);
+    if (l < n && *left > *largest_iter) {
+        largest_iter = left;
+    }
+    if (r < n && *right > *largest_iter) {
+        largest_iter = right;
+    }
+    if (largest_iter != prev) {
+        swap(prev, largest_iter);
+        heapify(first, end, largest_iter);
+    }
 }
 
 void introsort(itertyp first, itertyp end, int remaining) {
     auto last = end - 1;
     if (first != last) {
-        if (std::distance(first, end) < 4) {
+        auto dist = std::distance(first, end);
+        if (dist < 4) {
             selection_sort(first, end);
-        } else if (remaining >= 0) {
+        } else /*if (remaining >= 0)*/ {
             auto middle = piv(first, end);
             auto middles = partition(first + 1, middle, middle, last - 1);
             introsort(first, middles.first, remaining - 1);
             introsort(middles.second + 1, end, remaining - 1);
-        } else {
-
+/*        } else {
+            for (long i = dist / 2 - 1; i >= 0; i--)
+                heapify(first, end, first + i);
+            for (auto cur = last; cur != first; cur--) {
+                swap(first, cur);
+                heapify(first, cur, first);
+            }*/
         }
     }
 }
@@ -144,5 +170,5 @@ void introsort(vectyp &v) {
 }
 
 void withintrosort(std::istream &i, std::ostream &o) {
-    sortwith(introsort, i, o);
+    sortwith([](vectyp v){return introsort(v);}, i, o);
 }
