@@ -4,7 +4,7 @@
 
 #include <functional>
 #include "sortingalgo.h"
-#include <cassert>
+//#include <cassert>
 #include <limits>
 
 //std::__lg used in the libstdc stl_algo.h introsort impl also returns int
@@ -74,28 +74,32 @@ itertyp partition(itertyp first,
     return pivot;
 }
 
-std::pair<itertyp, itertyp>
-min_max(itertyp first, itertyp end) {
-    auto min = first;
-    auto max = first;
-    for (auto oddo = first + 1; oddo < end; oddo++) {
-        if (*oddo > *max) max = oddo;
-        if (*oddo < *min) min = oddo;
-    }
-    return {min, max};
-}
+//std::pair<itertyp, itertyp>
+//min_max(itertyp first, itertyp end) {
+//    auto min = first;
+//    auto max = first;
+//    for (auto oddo = first + 1; oddo < end; oddo++) {
+//        if (*oddo > *max) max = oddo;
+//        if (*oddo < *min) min = oddo;
+//    }
+//    return {min, max};
+//}
 
 void selection_sort(itertyp first, itertyp end) {
-    auto last = end - 1;
-    while (first + 1 < last) {
-        auto min_and_max = min_max(first, end);
-        if (first != min_and_max.first)
-            swap(first, min_and_max.first);
-        if (last != min_and_max.second && last != min_and_max.first)
-            swap(last, min_and_max.second);
+//    auto last = end - 1;
+    while (first /*+ 1*/ < end /*last*/) {
+        auto min = first;
+        for(auto i = first+1;i<end;i++)
+            if(*i < *min) min=i;
+//        auto min_and_max = min_max(first, end);
+        if(first!=min) swap(first, min);
+//        if (first != min_and_max.first)
+//            swap(first, min_and_max.first);
+//        if (last != min_and_max.second && last != min_and_max.first)
+//            swap(last, min_and_max.second);
         first++;
-        end--;
-        last--;
+//        end--;
+//        last--;
     }
 }
 
