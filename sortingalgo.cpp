@@ -2,10 +2,9 @@
 // Created by mf on 15.01.18.
 //
 
-#include <functional>
 #include "sortingalgo.h"
 //#include <cassert>
-#include <limits>
+//#include <limits>
 
 //std::__lg used in the libstdc stl_algo.h introsort impl also returns int
 // which int is then integer multiplicated by 2
@@ -30,6 +29,9 @@ void sortwith(withfuntyp with, std::istream &i, std::ostream &o) {
     int d;
     while (i >> d) v.push_back(d);
     with(v);
+    for(auto &e : v) {
+        o << e << std::endl;
+    }
 }
 
 void swap(itertyp one, itertyp other) {
@@ -162,5 +164,5 @@ void introsort(vectyp &v) {
 }
 
 void withintrosort(std::istream &i, std::ostream &o) {
-    sortwith([](vectyp v) { return introsort(v); }, i, o);
+    sortwith([](vectyp &v)mutable { return introsort(v); }, i, o);
 }

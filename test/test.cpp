@@ -9,6 +9,7 @@
 
 std::vector<tentyp> shorter = {5, 4, 111, 6, 8, 8, 56, 4, 4, 5};
 std::vector<tentyp> longer = {5, 4, 111, 6, 8, 8, 56, 4, 4, 5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+std::string stringified = "4 612  56 3546 2345 23 564  54675 34    2345345 5467  2345 2345 5464 562 2345 567 4 1 1 1 1 1 1 1 1 1 1 1 1  1";
 
 TEST_CASE("shortervecoweqs", "[vec qs shorter]") {
     std::vector<tentyp> our = shorter;
@@ -74,5 +75,13 @@ TEST_CASE("longervecowe", "[vec iso longer]") {
         REQUIRE(prev <= now);
         prev = now;
     }
+}
+
+TEST_CASE("stringowo", "[str, iso, stringified, cout]") {
+    std::istringstream in(stringified);
+    std::ostringstream out;
+    withintrosort(in,out);
+    auto output = out.str();
+    std::cout << output << std::endl;
 }
 
