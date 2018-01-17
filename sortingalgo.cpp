@@ -147,7 +147,7 @@ void introsort(itertyp first, itertyp end, int remaining) {
             if (pivot != last)
                 introsort(pivot + 1, end, remaining - 1);
         } else {
-            std::cout << "odpala!" << std::endl;
+//            std::cout << "odpala!" << std::endl;
             for (long i = dist / 2 - 1; i >= 0; i--)
                 heapify(first, end, first + i);
             for (auto cur = last; cur != first; cur--) {
