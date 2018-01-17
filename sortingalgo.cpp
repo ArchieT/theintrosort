@@ -86,15 +86,16 @@ min_max(itertyp first, itertyp end) {
 }
 
 void selection_sort(itertyp first, itertyp end) {
-    while (first < end) {
+    auto last = end - 1;
+    while (first + 1 < last) {
         auto min_and_max = min_max(first, end);
         if (first != min_and_max.first)
             swap(first, min_and_max.first);
-        auto last = end - 1;
         if (last != min_and_max.second && last != min_and_max.first)
             swap(last, min_and_max.second);
         first++;
-        end = last;
+        end--;
+        last--;
     }
 }
 
@@ -133,19 +134,20 @@ void introsort(itertyp first, itertyp end, int remaining) {
         auto dist = std::distance(first, end);
         if (dist < 4) {
             selection_sort(first, end);
-        } else /*if (remaining >= 0)*/ {
+        } else if (remaining >= 0) {
             auto pivot = partition(first, end);
             if (pivot != first)
                 introsort(first, pivot, remaining - 1);
             if (pivot != last)
                 introsort(pivot + 1, end, remaining - 1);
-//        } else {
-//            for (long i = dist / 2 - 1; i >= 0; i--)
-//                heapify(first, end, first + i);
-//            for (auto cur = last; cur != first; cur--) {
-//                swap(first, cur);
-//                heapify(first, cur, first);
-//            }
+        } else {
+            std::cout << "odpala!" << std::endl;
+            for (long i = dist / 2 - 1; i >= 0; i--)
+                heapify(first, end, first + i);
+            for (auto cur = last; cur != first; cur--) {
+                swap(first, cur);
+                heapify(first, cur, first);
+            }
         }
     }
 }
