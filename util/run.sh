@@ -11,4 +11,6 @@ time (echo $1 | ./theintrosort);
 echo "Skończył."
 #echo "Odpalam more na oucie…"
 #more $1.out;
+echo "Odpalam check: sort -c $1.out …"
+sort -nc $1.out
 echo "Zakończono wszystko."
