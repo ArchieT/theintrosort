@@ -55,7 +55,7 @@ itertyp partition(itertyp first,
     while (cur < last && pivot <= cur) {
         if (*cur < *pivot) {
             auto after_pivot = pivot + 1;
-            if (cur != after_pivot) swap(pivot, pivot + 1);
+            if (cur != after_pivot) swap(pivot, after_pivot);
             swap(cur, pivot);
             ++pivot;
         } else
