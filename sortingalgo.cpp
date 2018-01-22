@@ -24,16 +24,6 @@ int log2(unsigned long n) {
     }
 }
 
-void sortwith(withfuntyp with, std::istream &i, std::ostream &o) {
-    vectyp v;
-    int d;
-    while (i >> d) v.push_back(d);
-    with(v);
-    for(auto &e : v) {
-        o << e << std::endl;
-    }
-}
-
 void swap(itertyp one, itertyp other) {
     tentyp t = *one;
     *one = *other;
@@ -91,10 +81,10 @@ void selection_sort(itertyp first, itertyp end) {
 //    auto last = end - 1;
     while (first /*+ 1*/ < end /*last*/) {
         auto min = first;
-        for(auto i = first+1;i<end;i++)
-            if(*i < *min) min=i;
+        for (auto i = first + 1; i < end; i++)
+            if (*i < *min) min = i;
 //        auto min_and_max = min_max(first, end);
-        if(first!=min) swap(first, min);
+        if (first != min) swap(first, min);
 //        if (first != min_and_max.first)
 //            swap(first, min_and_max.first);
 //        if (last != min_and_max.second && last != min_and_max.first)
@@ -137,7 +127,7 @@ void quicksort(itertyp first, itertyp end) {
 void introsort(itertyp first, itertyp end, int remaining) {
     auto last = end - 1;
     if (first < last) {
-        auto dist = std::distance(first, end);
+        long dist = std::distance(first, end);
         if (dist < 4) {
             selection_sort(first, end);
         } else if (remaining >= 0) {
@@ -164,5 +154,11 @@ void introsort(vectyp &v) {
 }
 
 void withintrosort(std::istream &i, std::ostream &o) {
-    sortwith([](vectyp &v)mutable { return introsort(v); }, i, o);
+    vectyp v;
+    int d;
+    while (i >> d) v.push_back(d);
+    introsort(v);
+    for (tentyp &e : v) {
+        o << e << std::endl;
+    }
 }

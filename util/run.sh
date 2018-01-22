@@ -6,6 +6,9 @@ echo "Odpalam 'make theintrosort'…"
 make theintrosort;
 echo "Skończył już 'make theintrosort'"
 echo "Przypominam, nazwa pliku to $1"
+echo "Usuwam plik $1.out …"
+rm $1.out
+echo "Usunięto $1.out"
 echo "Teraz robię echo nazwy pliku, pipe'ując ją do wykonywalnego…"
 time (echo $1 | ./theintrosort);
 echo "Skończył."
